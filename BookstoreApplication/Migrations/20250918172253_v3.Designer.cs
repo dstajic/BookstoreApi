@@ -3,6 +3,7 @@ using System;
 using BookstoreApplication.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookstoreApplication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250918172253_v3")]
+    partial class v3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,35 +54,35 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 1,
                             Biography = "Fiction writer from USA",
-                            DateOfBirth = new DateTime(1975, 5, 12, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DateOfBirth = new DateTime(1975, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FullName = "John Doe"
                         },
                         new
                         {
                             Id = 2,
                             Biography = "Science fiction author",
-                            DateOfBirth = new DateTime(1980, 8, 22, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DateOfBirth = new DateTime(1980, 8, 22, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FullName = "Jane Smith"
                         },
                         new
                         {
                             Id = 3,
                             Biography = "Children's books author",
-                            DateOfBirth = new DateTime(1990, 2, 3, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DateOfBirth = new DateTime(1990, 2, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FullName = "Alice Johnson"
                         },
                         new
                         {
                             Id = 4,
                             Biography = "Historical novels writer",
-                            DateOfBirth = new DateTime(1965, 11, 15, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DateOfBirth = new DateTime(1965, 11, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FullName = "Robert Brown"
                         },
                         new
                         {
                             Id = 5,
                             Biography = "Mystery novels author",
-                            DateOfBirth = new DateTime(1985, 7, 30, 0, 0, 0, 0, DateTimeKind.Utc),
+                            DateOfBirth = new DateTime(1985, 7, 30, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FullName = "Emily Davis"
                         });
                 });
@@ -314,7 +317,7 @@ namespace BookstoreApplication.Migrations
                             AuthorId = 1,
                             ISBN = "978-0-1111-1111-1",
                             PageCount = 320,
-                            PublishedDate = new DateTime(2001, 5, 12, 0, 0, 0, 0, DateTimeKind.Utc),
+                            PublishedDate = new DateTime(2001, 5, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PublisherId = 1,
                             Title = "The Dawn"
                         },
@@ -324,7 +327,7 @@ namespace BookstoreApplication.Migrations
                             AuthorId = 2,
                             ISBN = "978-0-1111-1111-2",
                             PageCount = 280,
-                            PublishedDate = new DateTime(2005, 6, 10, 0, 0, 0, 0, DateTimeKind.Utc),
+                            PublishedDate = new DateTime(2005, 6, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PublisherId = 2,
                             Title = "Space Odyssey"
                         },
@@ -334,7 +337,7 @@ namespace BookstoreApplication.Migrations
                             AuthorId = 3,
                             ISBN = "978-0-1111-1111-3",
                             PageCount = 150,
-                            PublishedDate = new DateTime(2010, 3, 8, 0, 0, 0, 0, DateTimeKind.Utc),
+                            PublishedDate = new DateTime(2010, 3, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PublisherId = 1,
                             Title = "Magic Tales"
                         },
@@ -344,7 +347,7 @@ namespace BookstoreApplication.Migrations
                             AuthorId = 4,
                             ISBN = "978-0-1111-1111-4",
                             PageCount = 400,
-                            PublishedDate = new DateTime(1999, 1, 20, 0, 0, 0, 0, DateTimeKind.Utc),
+                            PublishedDate = new DateTime(1999, 1, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PublisherId = 3,
                             Title = "History of Rome"
                         },
@@ -354,7 +357,7 @@ namespace BookstoreApplication.Migrations
                             AuthorId = 5,
                             ISBN = "978-0-1111-1111-5",
                             PageCount = 250,
-                            PublishedDate = new DateTime(2015, 9, 12, 0, 0, 0, 0, DateTimeKind.Utc),
+                            PublishedDate = new DateTime(2015, 9, 12, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PublisherId = 2,
                             Title = "Mystery Manor"
                         },
@@ -364,7 +367,7 @@ namespace BookstoreApplication.Migrations
                             AuthorId = 1,
                             ISBN = "978-0-1111-1111-6",
                             PageCount = 300,
-                            PublishedDate = new DateTime(2008, 4, 18, 0, 0, 0, 0, DateTimeKind.Utc),
+                            PublishedDate = new DateTime(2008, 4, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PublisherId = 3,
                             Title = "Ocean Secrets"
                         },
@@ -374,7 +377,7 @@ namespace BookstoreApplication.Migrations
                             AuthorId = 2,
                             ISBN = "978-0-1111-1111-7",
                             PageCount = 360,
-                            PublishedDate = new DateTime(2012, 7, 25, 0, 0, 0, 0, DateTimeKind.Utc),
+                            PublishedDate = new DateTime(2012, 7, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PublisherId = 1,
                             Title = "Future Worlds"
                         },
@@ -384,7 +387,7 @@ namespace BookstoreApplication.Migrations
                             AuthorId = 3,
                             ISBN = "978-0-1111-1111-8",
                             PageCount = 200,
-                            PublishedDate = new DateTime(2018, 2, 14, 0, 0, 0, 0, DateTimeKind.Utc),
+                            PublishedDate = new DateTime(2018, 2, 14, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PublisherId = 2,
                             Title = "Fairy Land"
                         },
@@ -394,7 +397,7 @@ namespace BookstoreApplication.Migrations
                             AuthorId = 4,
                             ISBN = "978-0-1111-1111-9",
                             PageCount = 420,
-                            PublishedDate = new DateTime(2000, 11, 11, 0, 0, 0, 0, DateTimeKind.Utc),
+                            PublishedDate = new DateTime(2000, 11, 11, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PublisherId = 1,
                             Title = "Ancient Empires"
                         },
@@ -404,7 +407,7 @@ namespace BookstoreApplication.Migrations
                             AuthorId = 5,
                             ISBN = "978-0-1111-1111-10",
                             PageCount = 290,
-                            PublishedDate = new DateTime(2016, 6, 6, 0, 0, 0, 0, DateTimeKind.Utc),
+                            PublishedDate = new DateTime(2016, 6, 6, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PublisherId = 3,
                             Title = "Detective Stories"
                         },
@@ -414,7 +417,7 @@ namespace BookstoreApplication.Migrations
                             AuthorId = 1,
                             ISBN = "978-0-1111-1111-11",
                             PageCount = 310,
-                            PublishedDate = new DateTime(2011, 9, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            PublishedDate = new DateTime(2011, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PublisherId = 2,
                             Title = "Lost Kingdom"
                         },
@@ -424,7 +427,7 @@ namespace BookstoreApplication.Migrations
                             AuthorId = 2,
                             ISBN = "978-0-1111-1111-12",
                             PageCount = 270,
-                            PublishedDate = new DateTime(2014, 12, 5, 0, 0, 0, 0, DateTimeKind.Utc),
+                            PublishedDate = new DateTime(2014, 12, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PublisherId = 3,
                             Title = "Starlight Adventures"
                         });
