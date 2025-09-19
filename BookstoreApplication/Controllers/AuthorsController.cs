@@ -1,83 +1,56 @@
-﻿using BookstoreApplication.Data;
-using BookstoreApplication.Models;
+﻿using BookstoreApplication.Models;
+using BookstoreApplication.Repositories;
 using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using Microsoft.EntityFrameworkCore;
 
 namespace BookstoreApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthorsController : ControllerBase
+    public class AuthorController : ControllerBase
     {
-        // GET: api/authors
+        private readonly AuthorRepository _authorRepo;
+
+        public AuthorController(AuthorRepository authorRepo)
+        {
+            _authorRepo = authorRepo;
+        }
+
         [HttpGet]
-        public IActionResult GetAll()
+        public ActionResult<List<Author>> GetAll()
         {
-            return Ok(DataStore.Authors);
+            var authors = _authorRepo.GetAll();
+            return Ok(authors);
         }
 
-        // GET api/authors/5
         [HttpGet("{id}")]
-        public IActionResult GetOne(int id)
+        public ActionResult<Author> GetById(int id)
         {
-            var author = DataStore.Authors.FirstOrDefault(a => a.Id == id);
-            if (author == null)
-            {
-                return NotFound();
-            }
+            var author = _authorRepo.GetById(id);
+            if (author == null) return NotFound();
             return Ok(author);
         }
 
-        // POST api/authors
         [HttpPost]
-        public IActionResult Post(Author author)
+        public ActionResult<Author> Create(Author author)
         {
-            author.Id = DataStore.GetNewAuthorId();
-            DataStore.Authors.Add(author);
-            return Ok(author);
+            var created = _authorRepo.Add(author);
+            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
-        // PUT api/authors/5
         [HttpPut("{id}")]
-        public IActionResult Put(int id, Author author)
+        public ActionResult<Author> Update(int id, Author author)
         {
-            if (id != author.Id)
-            {
-                return BadRequest();
-            }
-
-            var existingAuthor = DataStore.Authors.FirstOrDefault(a => a.Id == id);
-            if (existingAuthor == null)
-            {
-                return NotFound();
-            }
-
-            int index = DataStore.Authors.IndexOf(existingAuthor);
-            if (index == -1)
-            {
-                return NotFound();
-                
-            }
-
-            DataStore.Authors[index] = author;
-            return Ok(author);
+            if (id != author.Id) return BadRequest("ID mismatch");
+            var updated = _authorRepo.Update(author);
+            return Ok(updated);
         }
 
-        // DELETE api/authors/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var author = DataStore.Authors.FirstOrDefault(a => a.Id == id);
-            if (author == null)
-            {
-                return NotFound();
-            }
-            DataStore.Authors.Remove(author);
-
-            // kaskadno brisanje svih knjiga obrisanog autora
-            DataStore.Books.RemoveAll(b => b.AuthorId == id);
-
+            var success = _authorRepo.DeleteById(id);
+            if (!success) return NotFound();
             return NoContent();
         }
     }

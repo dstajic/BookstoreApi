@@ -9,7 +9,7 @@ namespace BookstoreApplication.Models
         public DbSet<Author> Author { get; set; }
         public DbSet<Publisher> Publisher { get; set; }
         public DbSet<AwardAuthor> AwardsAuthors { get; set; }
-
+        public DbSet<Award> Awards { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
