@@ -5,47 +5,65 @@ namespace BookstoreApplication.Repositories
 {
     public class BookRepository
     {
-        private AppDbContext _context;
+        private readonly AppDbContext _context;
+
         public BookRepository(AppDbContext context)
         {
             _context = context;
         }
-        public List<Book> GetAll()
+
+        public async Task<List<Book>> GetAllAsync()
         {
-            return _context.Books
-                           .Include(b => b.Author)
-                           .Include(b => b.Publisher)
-                           .ToList();
+            return await _context.Books
+                                 .Include(b => b.Author)
+                                 .Include(b => b.Publisher)
+                                 .ToListAsync();
         }
 
-        public Book? GetById(int id)
+        public async Task<Book?> GetByIdAsync(int id)
         {
-            return _context.Books
-                           .Include(b => b.Author)
-                           .Include(b => b.Publisher)
-                           .FirstOrDefault(b => b.Id == id);
+            return await _context.Books
+                                 .Include(b => b.Author)
+                                 .Include(b => b.Publisher)
+                                 .FirstOrDefaultAsync(b => b.Id == id);
         }
-        public Book Update(Book book)
+
+        public async Task<Book> UpdateAsync(Book book)
         {
-            _context.Update(book);
-            _context.SaveChanges();
-            return book;
+            var existingBook = await _context.Books.FindAsync(book.Id);
+            if (existingBook == null)
+            {
+                throw new ArgumentException($"Book with Id: {book.Id} does not exist");
+            }
+
+            existingBook.Title = book.Title;
+            existingBook.AuthorId = book.AuthorId;
+            existingBook.PublisherId = book.PublisherId;
+            existingBook.PublishedDate = book.PublishedDate;
+            existingBook.ISBN = book.ISBN;
+            existingBook.PageCount = book.PageCount;
+
+            await _context.SaveChangesAsync();
+            return existingBook;
         }
-        public bool DeleteById(int id)
+
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            Book book = _context.Books.Find(id);
-            if(book==null)
+            var book = await _context.Books.FindAsync(id);
+            if (book == null)
             {
                 return false;
             }
+
             _context.Books.Remove(book);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
-        public Book Add(Book book)
+
+        public async Task<Book> AddAsync(Book book)
         {
-            _context.Books.Add(book);
-            _context.SaveChanges();
+            await _context.Books.AddAsync(book);
+            await _context.SaveChangesAsync();
             return book;
         }
     }

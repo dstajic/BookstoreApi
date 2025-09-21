@@ -1,44 +1,60 @@
 ﻿using BookstoreApplication.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookstoreApplication.Repositories
 {
     public class PublisherRepository
     {
-        private AppDbContext _context;
+        private readonly AppDbContext _context;
 
         public PublisherRepository(AppDbContext context)
         {
             _context = context;
         }
-        public List<Publisher> GetAll() 
+
+        public async Task<List<Publisher>> GetAllAsync()
         {
-            return _context.Publisher.ToList();
+            return await _context.Publisher.ToListAsync();
         }
-        public Publisher GetById(int id)
+
+        public async Task<Publisher?> GetByIdAsync(int id)
         {
-            return _context.Publisher.Find(id);
+            return await _context.Publisher.FindAsync(id);
         }
-        public Publisher Update(Publisher publisher)
+
+        public async Task<Publisher> UpdateAsync(Publisher publisher)
         {
-            _context.Publisher.Update(publisher);
-            _context.SaveChanges();
-            return publisher;
+            var existingPublisher = await _context.Publisher.FindAsync(publisher.Id);
+            if (existingPublisher == null)
+            {
+                throw new ArgumentException($"Publisher with id {publisher.Id} doesn't exist");
+            }
+
+            existingPublisher.Address = publisher.Address;
+            existingPublisher.Name = publisher.Name;
+            existingPublisher.Website = publisher.Website;
+
+            await _context.SaveChangesAsync();
+            return existingPublisher;
         }
-        public bool DeleteById(int id)
+
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            Publisher publisher = _context.Publisher.Find(id);
-            if(publisher==null)
+            var publisher = await _context.Publisher.FindAsync(id);
+            if (publisher == null)
             {
                 return false;
             }
+
             _context.Publisher.Remove(publisher);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
-        public Publisher Add(Publisher publisher)
+
+        public async Task<Publisher> AddAsync(Publisher publisher)
         {
-            _context.Publisher.Add(publisher);
-            _context.SaveChanges();
+            await _context.Publisher.AddAsync(publisher);
+            await _context.SaveChangesAsync();
             return publisher;
         }
     }

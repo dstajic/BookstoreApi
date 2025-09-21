@@ -1,47 +1,60 @@
 ﻿using BookstoreApplication.Models;
-using System.Net;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookstoreApplication.Repositories
 {
     public class AwardRepository
     {
-        private AppDbContext _context;
+        private readonly AppDbContext _context;
 
         public AwardRepository(AppDbContext context)
         {
-            _context = context ;
+            _context = context;
         }
 
-        public List<Award> GetAll()
+        public async Task<List<Award>> GetAllAsync()
         {
-            return _context.Awards.ToList();
+            return await _context.Awards.ToListAsync();
         }
-        public Award GetById(int id)
+
+        public async Task<Award?> GetByIdAsync(int id)
         {
-            return _context.Awards.Find(id);
+            return await _context.Awards.FindAsync(id);
         }
-        public Award Update(Award award)
+
+        public async Task<Award> UpdateAsync(Award award)
         {
-            _context.Awards.Update(award);
-            _context.SaveChanges();
-            return award;
+            var existingAward = await _context.Awards.FindAsync(award.Id);
+            if (existingAward == null)
+            {
+                throw new ArgumentException($"Award with ID {award.Id} not found");
+            }
+
+            existingAward.Name = award.Name;
+            existingAward.Description = award.Description;
+            existingAward.StartYear = award.StartYear;
+
+            await _context.SaveChangesAsync();
+            return existingAward;
         }
-        public bool DeleteById(int id)
+
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            Award award = _context.Awards.Find(id);
+            var award = await _context.Awards.FindAsync(id);
             if (award == null)
             {
                 return false;
             }
+
             _context.Awards.Remove(award);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
-            
         }
-        public Award Add(Award award)
+
+        public async Task<Award> AddAsync(Award award)
         {
-            _context.Awards.Add(award);
-            _context.SaveChanges();
+            await _context.Awards.AddAsync(award);
+            await _context.SaveChangesAsync();
             return award;
         }
     }

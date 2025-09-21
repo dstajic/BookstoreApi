@@ -1,45 +1,62 @@
 ﻿using BookstoreApplication.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookstoreApplication.Repositories
 {
     public class AuthorRepository
     {
-        private AppDbContext _context;
+        private readonly AppDbContext _context;
 
         public AuthorRepository(AppDbContext context)
         {
             _context = context;
         }
-        public List<Author> GetAll()
+
+        public async Task<List<Author>> GetAllAsync()
         {
-            return _context.Author.ToList(); //Obicno bi trebalo Authors, ali moja tabela se zove Author jer sam lose imenovao :(
+            // Note: use ToListAsync() for async querying
+            return await _context.Author.ToListAsync();
         }
-        public Author GetById(int id)
+
+        public async Task<Author?> GetByIdAsync(int id)
         {
-            return _context.Author.Find(id);
-                
+            return await _context.Author.FindAsync(id);
         }
-        public bool DeleteById(int id)
+
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            Author author = _context.Author.Find(id);
+            var author = await _context.Author.FindAsync(id);
             if (author == null)
             {
                 return false;
             }
+
             _context.Author.Remove(author);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
-        public Author Update(Author author)
+
+        public async Task<Author> UpdateAsync(Author author)
         {
-            _context.Author.Update(author);
-            _context.SaveChanges();
-            return author;
+            var existingAuthor = await _context.Author.FindAsync(author.Id);
+            if (existingAuthor == null)
+            {
+                throw new ArgumentException($"Author with ID {author.Id} not found");
+            }
+
+            existingAuthor.FullName = author.FullName;
+            existingAuthor.Biography = author.Biography;
+            existingAuthor.DateOfBirth = author.DateOfBirth;
+
+            await _context.SaveChangesAsync();
+
+            return existingAuthor;
         }
-        public Author Add(Author author)
+
+        public async Task<Author> AddAsync(Author author)
         {
-            _context.Author.Add(author);
-            _context.SaveChanges();
+            await _context.Author.AddAsync(author);
+            await _context.SaveChangesAsync();
             return author;
         }
     }
