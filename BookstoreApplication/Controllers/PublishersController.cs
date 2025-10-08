@@ -1,6 +1,8 @@
 ﻿using BookstoreApplication.Models;
-using BookstoreApplication.Repositories;
+using BookstoreApplication.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BookstoreApplication.Controllers
 {
@@ -8,48 +10,71 @@ namespace BookstoreApplication.Controllers
     [ApiController]
     public class PublisherController : ControllerBase
     {
-        private readonly PublisherRepository _publisherRepo;
+        private readonly PublisherService _publisherService;
 
-        public PublisherController(PublisherRepository publisherRepo)
+        public PublisherController(AppDbContext context)
         {
-            _publisherRepo = publisherRepo;
+            _publisherService = new PublisherService(context);
         }
 
+        // GET: api/publisher
         [HttpGet]
-        public ActionResult<List<Publisher>> GetAll()
+        public async Task<ActionResult<List<Publisher>>> GetAll()
         {
-            var publishers = _publisherRepo.GetAll();
+            var publishers = await _publisherService.GetAllAsync();
             return Ok(publishers);
         }
 
+        // GET: api/publisher/{id}
         [HttpGet("{id}")]
-        public ActionResult<Publisher> GetById(int id)
+        public async Task<ActionResult<Publisher>> GetById(int id)
         {
-            var publisher = _publisherRepo.GetById(id);
-            if (publisher == null) return NotFound();
+            var publisher = await _publisherService.GetByIdAsync(id);
+            if (publisher == null)
+            {
+                return NotFound();
+            }
+
             return Ok(publisher);
         }
 
+        // POST: api/publisher
         [HttpPost]
-        public ActionResult<Publisher> Create(Publisher publisher)
+        public async Task<ActionResult<Publisher>> Create(Publisher publisher)
         {
-            var created = _publisherRepo.Add(publisher);
+            var created = await _publisherService.AddAsync(publisher);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
+        // PUT: api/publisher/{id}
         [HttpPut("{id}")]
-        public ActionResult<Publisher> Update(int id, Publisher publisher)
+        public async Task<ActionResult<Publisher>> Update(int id, Publisher publisher)
         {
-            if (id != publisher.Id) return BadRequest("ID mismatch");
-            var updated = _publisherRepo.Update(publisher);
+            if (id != publisher.Id)
+            {
+                return BadRequest("ID mismatch");
+            }
+
+            var existing = await _publisherService.GetByIdAsync(id);
+            if (existing == null)
+            {
+                return NotFound();
+            }
+
+            var updated = await _publisherService.UpdateAsync(publisher);
             return Ok(updated);
         }
 
+        // DELETE: api/publisher/{id}
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var success = _publisherRepo.DeleteById(id);
-            if (!success) return NotFound();
+            var deleted = await _publisherService.DeleteByIdAsync(id);
+            if (deleted == null)
+            {
+                return NotFound();
+            }
+
             return NoContent();
         }
     }

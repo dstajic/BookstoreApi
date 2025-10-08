@@ -14,7 +14,7 @@ namespace BookstoreApplication.Repositories
 
         public async Task<List<Author>> GetAllAsync()
         {
-            // Note: use ToListAsync() for async querying
+           
             return await _context.Author.ToListAsync();
         }
 
