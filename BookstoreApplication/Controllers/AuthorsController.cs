@@ -10,11 +10,11 @@ namespace BookstoreApplication.Controllers
     [ApiController]
     public class AuthorController : ControllerBase
     {
-        private readonly AuthorService _authorService;
+        private readonly IAuthorService _authorService;
 
-        public AuthorController(AppDbContext context)
+        public AuthorController(IAuthorService authorService)
         {
-            _authorService = new AuthorService(context);
+            _authorService = authorService;
         }
 
         // GET: api/author

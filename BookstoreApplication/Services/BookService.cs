@@ -2,13 +2,13 @@
 using BookstoreApplication.Models;
 namespace BookstoreApplication.Services
 {
-    public class BookService
+    public class BookService : IBookService
     {
-        private readonly BookRepository _bookRepository;
+        private readonly IBookRepository _bookRepository;
 
-        public BookService(AppDbContext context)
+        public BookService(IBookRepository bookRepository)
         {
-            _bookRepository = new BookRepository(context);
+            _bookRepository = bookRepository;
         }
         public async Task<List<Book>> GetAllAsync()
         {

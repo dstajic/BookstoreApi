@@ -4,12 +4,12 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace BookstoreApplication.Services
 {
-    public class AwardService
+    public class AwardService : IAwardService
     {
-        private readonly AwardRepository _awardRepository;
-        public AwardService(AppDbContext context) 
+        private readonly IAwardRepository _awardRepository;
+        public AwardService(IAwardRepository awardRepository)
         {
-            _awardRepository = new AwardRepository(context);
+            _awardRepository = awardRepository;
         }
         public async Task<List<Award>> GetAllAsync()
         {
