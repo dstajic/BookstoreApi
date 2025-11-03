@@ -1,5 +1,6 @@
 ﻿using BookstoreApplication.Models;
-using BookstoreApplication.Repositories;
+using BookstoreApplication.Repositories.IRepositories;
+using BookstoreApplication.Services.IService;
 using System.Diagnostics.CodeAnalysis;
 
 namespace BookstoreApplication.Services

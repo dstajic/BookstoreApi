@@ -1,6 +1,6 @@
 ﻿using BookstoreApplication.Models;
 using Microsoft.EntityFrameworkCore;
-namespace BookstoreApplication.Repositories
+namespace BookstoreApplication.Repositories.IRepositories
 {
     public interface IBookRepository
     {

@@ -1,5 +1,6 @@
-﻿using BookstoreApplication.Repositories;
-using BookstoreApplication.Models;
+﻿using BookstoreApplication.Models;
+using BookstoreApplication.Repositories.IRepositories;
+using BookstoreApplication.Services.IService;
 namespace BookstoreApplication.Services
 {
     public class BookService : IBookService
