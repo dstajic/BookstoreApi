@@ -10,6 +10,7 @@ namespace BookstoreApplication.Profiles
         {
             CreateMap<RegistrationDTO, ApplicationUser>();
             CreateMap<LoginDTO, ApplicationUser>();
+            CreateMap<ApplicationUser,ProfileDTO>();
         }
     }
 }
