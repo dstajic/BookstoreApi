@@ -13,6 +13,7 @@ namespace BookstoreApplication.Models
         public DbSet<Publisher> Publisher { get; set; }
         public DbSet<AwardAuthor> AwardsAuthors { get; set; }
         public DbSet<Award> Awards { get; set; }
+        public DbSet<Review> Reviews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,7 +49,17 @@ namespace BookstoreApplication.Models
                 .WithMany(p => p.Books)
                 .HasForeignKey(b => b.PublisherId)
                 .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Review>()
+        .HasOne(r => r.Book)
+        .WithMany(b => b.Reviews)
+        .HasForeignKey(r => r.BookId)
+        .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
             // Seed Authors
             modelBuilder.Entity<Author>().HasData(
                 new Author { Id = 1, FullName = "John Doe", Biography = "Fiction writer from USA", DateOfBirth = DateTime.SpecifyKind(new DateTime(1975, 5, 12), DateTimeKind.Utc) },

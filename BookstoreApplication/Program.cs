@@ -5,6 +5,7 @@ using BookstoreApplication.Repositories;
 using BookstoreApplication.Repositories.IRepositories;
 using BookstoreApplication.Services;
 using BookstoreApplication.Services.IService;
+using BookstoreApplication.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +33,7 @@ builder.Services.AddControllers()
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IBookService, BookService>();
 
@@ -43,6 +45,9 @@ builder.Services.AddScoped<IPublisherService, PublisherService>();
 
 builder.Services.AddScoped<IAwardRepository, AwardRepository>();
 builder.Services.AddScoped<IAwardService, AwardService>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+
 builder.Services.AddAutoMapper(cfg =>
 {
     cfg.AddProfile<MappingProfile>();

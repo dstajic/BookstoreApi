@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookstoreApplication.Migrations
 {
     /// <inheritdoc />
-    public partial class V1 : Migration
+    public partial class v1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -243,6 +243,7 @@ namespace BookstoreApplication.Migrations
                     PageCount = table.Column<int>(type: "integer", nullable: false),
                     PublishedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ISBN = table.Column<string>(type: "text", nullable: false),
+                    AverageRating = table.Column<double>(type: "double precision", nullable: false),
                     AuthorId = table.Column<int>(type: "integer", nullable: false),
                     PublisherId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -261,6 +262,35 @@ namespace BookstoreApplication.Migrations
                         principalTable: "Publisher",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    BookId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: false),
+                    Rating = table.Column<int>(type: "integer", nullable: false),
+                    Comment = table.Column<string>(type: "text", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reviews_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -320,21 +350,21 @@ namespace BookstoreApplication.Migrations
 
             migrationBuilder.InsertData(
                 table: "Books",
-                columns: new[] { "Id", "AuthorId", "ISBN", "PageCount", "PublishedDate", "PublisherId", "Title" },
+                columns: new[] { "Id", "AuthorId", "AverageRating", "ISBN", "PageCount", "PublishedDate", "PublisherId", "Title" },
                 values: new object[,]
                 {
-                    { 1, 1, "978-0-1111-1111-1", 320, new DateTime(2001, 5, 12, 0, 0, 0, 0, DateTimeKind.Utc), 1, "The Dawn" },
-                    { 2, 2, "978-0-1111-1111-2", 280, new DateTime(2005, 6, 10, 0, 0, 0, 0, DateTimeKind.Utc), 2, "Space Odyssey" },
-                    { 3, 3, "978-0-1111-1111-3", 150, new DateTime(2010, 3, 8, 0, 0, 0, 0, DateTimeKind.Utc), 1, "Magic Tales" },
-                    { 4, 4, "978-0-1111-1111-4", 400, new DateTime(1999, 1, 20, 0, 0, 0, 0, DateTimeKind.Utc), 3, "History of Rome" },
-                    { 5, 5, "978-0-1111-1111-5", 250, new DateTime(2015, 9, 12, 0, 0, 0, 0, DateTimeKind.Utc), 2, "Mystery Manor" },
-                    { 6, 1, "978-0-1111-1111-6", 300, new DateTime(2008, 4, 18, 0, 0, 0, 0, DateTimeKind.Utc), 3, "Ocean Secrets" },
-                    { 7, 2, "978-0-1111-1111-7", 360, new DateTime(2012, 7, 25, 0, 0, 0, 0, DateTimeKind.Utc), 1, "Future Worlds" },
-                    { 8, 3, "978-0-1111-1111-8", 200, new DateTime(2018, 2, 14, 0, 0, 0, 0, DateTimeKind.Utc), 2, "Fairy Land" },
-                    { 9, 4, "978-0-1111-1111-9", 420, new DateTime(2000, 11, 11, 0, 0, 0, 0, DateTimeKind.Utc), 1, "Ancient Empires" },
-                    { 10, 5, "978-0-1111-1111-10", 290, new DateTime(2016, 6, 6, 0, 0, 0, 0, DateTimeKind.Utc), 3, "Detective Stories" },
-                    { 11, 1, "978-0-1111-1111-11", 310, new DateTime(2011, 9, 1, 0, 0, 0, 0, DateTimeKind.Utc), 2, "Lost Kingdom" },
-                    { 12, 2, "978-0-1111-1111-12", 270, new DateTime(2014, 12, 5, 0, 0, 0, 0, DateTimeKind.Utc), 3, "Starlight Adventures" }
+                    { 1, 1, 0.0, "978-0-1111-1111-1", 320, new DateTime(2001, 5, 12, 0, 0, 0, 0, DateTimeKind.Utc), 1, "The Dawn" },
+                    { 2, 2, 0.0, "978-0-1111-1111-2", 280, new DateTime(2005, 6, 10, 0, 0, 0, 0, DateTimeKind.Utc), 2, "Space Odyssey" },
+                    { 3, 3, 0.0, "978-0-1111-1111-3", 150, new DateTime(2010, 3, 8, 0, 0, 0, 0, DateTimeKind.Utc), 1, "Magic Tales" },
+                    { 4, 4, 0.0, "978-0-1111-1111-4", 400, new DateTime(1999, 1, 20, 0, 0, 0, 0, DateTimeKind.Utc), 3, "History of Rome" },
+                    { 5, 5, 0.0, "978-0-1111-1111-5", 250, new DateTime(2015, 9, 12, 0, 0, 0, 0, DateTimeKind.Utc), 2, "Mystery Manor" },
+                    { 6, 1, 0.0, "978-0-1111-1111-6", 300, new DateTime(2008, 4, 18, 0, 0, 0, 0, DateTimeKind.Utc), 3, "Ocean Secrets" },
+                    { 7, 2, 0.0, "978-0-1111-1111-7", 360, new DateTime(2012, 7, 25, 0, 0, 0, 0, DateTimeKind.Utc), 1, "Future Worlds" },
+                    { 8, 3, 0.0, "978-0-1111-1111-8", 200, new DateTime(2018, 2, 14, 0, 0, 0, 0, DateTimeKind.Utc), 2, "Fairy Land" },
+                    { 9, 4, 0.0, "978-0-1111-1111-9", 420, new DateTime(2000, 11, 11, 0, 0, 0, 0, DateTimeKind.Utc), 1, "Ancient Empires" },
+                    { 10, 5, 0.0, "978-0-1111-1111-10", 290, new DateTime(2016, 6, 6, 0, 0, 0, 0, DateTimeKind.Utc), 3, "Detective Stories" },
+                    { 11, 1, 0.0, "978-0-1111-1111-11", 310, new DateTime(2011, 9, 1, 0, 0, 0, 0, DateTimeKind.Utc), 2, "Lost Kingdom" },
+                    { 12, 2, 0.0, "978-0-1111-1111-12", 270, new DateTime(2014, 12, 5, 0, 0, 0, 0, DateTimeKind.Utc), 3, "Starlight Adventures" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -393,6 +423,16 @@ namespace BookstoreApplication.Migrations
                 name: "IX_Books_PublisherId",
                 table: "Books",
                 column: "PublisherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_BookId",
+                table: "Reviews",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_UserId",
+                table: "Reviews",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -417,16 +457,19 @@ namespace BookstoreApplication.Migrations
                 name: "AwardAuthorBridge");
 
             migrationBuilder.DropTable(
-                name: "Books");
+                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "Awards");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Awards");
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Author");

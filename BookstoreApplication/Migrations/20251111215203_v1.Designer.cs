@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookstoreApplication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251103222812_V1")]
-    partial class V1
+    [Migration("20251111215203_v1")]
+    partial class v1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -357,6 +357,9 @@ namespace BookstoreApplication.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("integer");
 
+                    b.Property<double>("AverageRating")
+                        .HasColumnType("double precision");
+
                     b.Property<string>("ISBN")
                         .IsRequired()
                         .HasColumnType("text");
@@ -387,6 +390,7 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 1,
                             AuthorId = 1,
+                            AverageRating = 0.0,
                             ISBN = "978-0-1111-1111-1",
                             PageCount = 320,
                             PublishedDate = new DateTime(2001, 5, 12, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -397,6 +401,7 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 2,
                             AuthorId = 2,
+                            AverageRating = 0.0,
                             ISBN = "978-0-1111-1111-2",
                             PageCount = 280,
                             PublishedDate = new DateTime(2005, 6, 10, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -407,6 +412,7 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 3,
                             AuthorId = 3,
+                            AverageRating = 0.0,
                             ISBN = "978-0-1111-1111-3",
                             PageCount = 150,
                             PublishedDate = new DateTime(2010, 3, 8, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -417,6 +423,7 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 4,
                             AuthorId = 4,
+                            AverageRating = 0.0,
                             ISBN = "978-0-1111-1111-4",
                             PageCount = 400,
                             PublishedDate = new DateTime(1999, 1, 20, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -427,6 +434,7 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 5,
                             AuthorId = 5,
+                            AverageRating = 0.0,
                             ISBN = "978-0-1111-1111-5",
                             PageCount = 250,
                             PublishedDate = new DateTime(2015, 9, 12, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -437,6 +445,7 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 6,
                             AuthorId = 1,
+                            AverageRating = 0.0,
                             ISBN = "978-0-1111-1111-6",
                             PageCount = 300,
                             PublishedDate = new DateTime(2008, 4, 18, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -447,6 +456,7 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 7,
                             AuthorId = 2,
+                            AverageRating = 0.0,
                             ISBN = "978-0-1111-1111-7",
                             PageCount = 360,
                             PublishedDate = new DateTime(2012, 7, 25, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -457,6 +467,7 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 8,
                             AuthorId = 3,
+                            AverageRating = 0.0,
                             ISBN = "978-0-1111-1111-8",
                             PageCount = 200,
                             PublishedDate = new DateTime(2018, 2, 14, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -467,6 +478,7 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 9,
                             AuthorId = 4,
+                            AverageRating = 0.0,
                             ISBN = "978-0-1111-1111-9",
                             PageCount = 420,
                             PublishedDate = new DateTime(2000, 11, 11, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -477,6 +489,7 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 10,
                             AuthorId = 5,
+                            AverageRating = 0.0,
                             ISBN = "978-0-1111-1111-10",
                             PageCount = 290,
                             PublishedDate = new DateTime(2016, 6, 6, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -487,6 +500,7 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 11,
                             AuthorId = 1,
+                            AverageRating = 0.0,
                             ISBN = "978-0-1111-1111-11",
                             PageCount = 310,
                             PublishedDate = new DateTime(2011, 9, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -497,6 +511,7 @@ namespace BookstoreApplication.Migrations
                         {
                             Id = 12,
                             AuthorId = 2,
+                            AverageRating = 0.0,
                             ISBN = "978-0-1111-1111-12",
                             PageCount = 270,
                             PublishedDate = new DateTime(2014, 12, 5, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -551,6 +566,39 @@ namespace BookstoreApplication.Migrations
                             Name = "Star Publishers",
                             Website = "http://starpublishers.com"
                         });
+                });
+
+            modelBuilder.Entity("BookstoreApplication.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -723,6 +771,25 @@ namespace BookstoreApplication.Migrations
                     b.Navigation("Publisher");
                 });
 
+            modelBuilder.Entity("BookstoreApplication.Models.Review", b =>
+                {
+                    b.HasOne("BookstoreApplication.Models.Book", "Book")
+                        .WithMany("Reviews")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BookstoreApplication.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -782,6 +849,11 @@ namespace BookstoreApplication.Migrations
             modelBuilder.Entity("BookstoreApplication.Models.Award", b =>
                 {
                     b.Navigation("AwardAuthors");
+                });
+
+            modelBuilder.Entity("BookstoreApplication.Models.Book", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("BookstoreApplication.Models.Publisher", b =>
