@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookstoreApplication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251111215203_v1")]
+    [Migration("20251111222311_v1")]
     partial class v1
     {
         /// <inheritdoc />
@@ -118,6 +118,9 @@ namespace BookstoreApplication.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FullName")
+                        .HasDatabaseName("IX_Authors_Name");
 
                     b.ToTable("Author");
 

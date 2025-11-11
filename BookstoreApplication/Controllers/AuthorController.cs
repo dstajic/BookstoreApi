@@ -69,12 +69,31 @@ namespace BookstoreApplication.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _authorService.DeleteByIdAsync(id);
-            if (deleted == null)
+            if (!deleted)
             {
                 return NotFound();
             }
 
             return NoContent();
+        }
+
+        // Novi endpoint: pretraga autora po imenu
+        // GET: api/author/search?name=John
+        [HttpGet("search")]
+        public async Task<ActionResult<List<Author>>> Search([FromQuery] string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest("Search term cannot be empty");
+            }
+
+            var authors = await _authorService.SearchByNameAsync(name);
+            if (authors == null || authors.Count == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(authors);
         }
     }
 }

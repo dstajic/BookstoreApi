@@ -10,5 +10,6 @@ namespace BookstoreApplication.Repositories.IRepositories
         Task<bool> DeleteByIdAsync(int id);
         Task<Author> UpdateAsync(Author author);
         Task<Author> AddAsync(Author author);
+        Task<List<Author>> SearchByNameAsync(string name);
     }
 }

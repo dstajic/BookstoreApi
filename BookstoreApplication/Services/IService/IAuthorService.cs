@@ -9,5 +9,6 @@ namespace BookstoreApplication.Services.IService
         Task<List<Author>> GetAllAsync();
         Task<Author?> GetByIdAsync(int id);
         Task<Author> UpdateAsync(Author author);
+        Task<List<Author>> SearchByNameAsync(string name);
     }
 }

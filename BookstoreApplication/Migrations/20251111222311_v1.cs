@@ -405,6 +405,11 @@ namespace BookstoreApplication.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Authors_Name",
+                table: "Author",
+                column: "FullName");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AwardAuthorBridge_AuthorId",
                 table: "AwardAuthorBridge",
                 column: "AuthorId");

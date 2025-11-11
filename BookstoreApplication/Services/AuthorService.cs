@@ -10,7 +10,7 @@ namespace BookstoreApplication.Services
 
         public AuthorService(IAuthorRepository authorRepository)
         {
-            _authorRepository = authorRepository ;
+            _authorRepository = authorRepository;
         }
         public async Task<List<Author>> GetAllAsync()
         {
@@ -31,6 +31,10 @@ namespace BookstoreApplication.Services
         public async Task<Author> AddAsync(Author author)
         {
             return await _authorRepository.AddAsync(author);
+        }
+        public async Task<List<Author>> SearchByNameAsync(string name)
+        {
+            return await _authorRepository.SearchByNameAsync(name);
         }
     }
 }

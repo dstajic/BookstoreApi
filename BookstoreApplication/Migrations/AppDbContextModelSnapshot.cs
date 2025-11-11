@@ -116,6 +116,9 @@ namespace BookstoreApplication.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("FullName")
+                        .HasDatabaseName("IX_Authors_Name");
+
                     b.ToTable("Author");
 
                     b.HasData(

@@ -42,6 +42,9 @@ namespace BookstoreApplication.Models
             {
                 entity.Property(a => a.DateOfBirth).HasColumnName("Birthday");
             });
+            modelBuilder.Entity<Author>()
+       .HasIndex(a => a.FullName)
+       .HasDatabaseName("IX_Authors_Name");
 
             // Book -> Publisher relationship
             modelBuilder.Entity<Book>()
@@ -60,6 +63,7 @@ namespace BookstoreApplication.Models
                 .WithMany()
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+            
             // Seed Authors
             modelBuilder.Entity<Author>().HasData(
                 new Author { Id = 1, FullName = "John Doe", Biography = "Fiction writer from USA", DateOfBirth = DateTime.SpecifyKind(new DateTime(1975, 5, 12), DateTimeKind.Utc) },

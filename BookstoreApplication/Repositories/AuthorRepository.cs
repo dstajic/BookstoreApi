@@ -1,10 +1,13 @@
 ﻿using BookstoreApplication.Models;
 using BookstoreApplication.Repositories.IRepositories;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BookstoreApplication.Repositories
 {
-    public class AuthorRepository:IAuthorRepository
+    public class AuthorRepository : IAuthorRepository
     {
         private readonly AppDbContext _context;
 
@@ -13,30 +16,31 @@ namespace BookstoreApplication.Repositories
             _context = context;
         }
 
+        // Vrati sve autore
         public async Task<List<Author>> GetAllAsync()
         {
-           
-            return await _context.Author.ToListAsync();
+            return await _context.Author
+                .AsNoTracking() // bolje za performanse ako ne menjamo entitete
+                .ToListAsync();
         }
 
+        // Vrati autora po ID
         public async Task<Author?> GetByIdAsync(int id)
         {
-            return await _context.Author.FindAsync(id);
+            return await _context.Author
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task<bool> DeleteByIdAsync(int id)
+        // Dodaj novog autora
+        public async Task<Author> AddAsync(Author author)
         {
-            var author = await _context.Author.FindAsync(id);
-            if (author == null)
-            {
-                return false;
-            }
-
-            _context.Author.Remove(author);
+            await _context.Author.AddAsync(author);
             await _context.SaveChangesAsync();
-            return true;
+            return author;
         }
 
+        // Ažuriraj postojećeg autora
         public async Task<Author> UpdateAsync(Author author)
         {
             var existingAuthor = await _context.Author.FindAsync(author.Id);
@@ -50,15 +54,28 @@ namespace BookstoreApplication.Repositories
             existingAuthor.DateOfBirth = author.DateOfBirth;
 
             await _context.SaveChangesAsync();
-
             return existingAuthor;
         }
 
-        public async Task<Author> AddAsync(Author author)
+        // Obriši autora po ID
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            await _context.Author.AddAsync(author);
+            var author = await _context.Author.FindAsync(id);
+            if (author == null) return false;
+
+            _context.Author.Remove(author);
             await _context.SaveChangesAsync();
-            return author;
+            return true;
         }
+
+        // Pretraga autora po imenu (koristi indeks automatski)
+        public async Task<List<Author>> SearchByNameAsync(string name)
+        {
+            return await _context.Author
+                .AsNoTracking()
+                .Where(a => a.FullName.Contains(name)) // PostgreSQL koristi indeks na FullName
+                .ToListAsync();
+        }
+
     }
 }
